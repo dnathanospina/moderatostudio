@@ -1,240 +1,134 @@
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const root = document.documentElement;
+/* Moderato Studio — idioma (ES/EN), carrusel y año.
+   El español está escrito en el HTML. Cada texto traducible lleva data-i18n="clave"
+   (o data-i18n-attr="atributo:clave") y su inglés va en EN, más abajo. */
 
-// ── IDIOMA ──
-// El HTML está en español; js/i18n.js aporta el inglés. El idioma inicial lo decide
-// el script inline del <head> (elección guardada o idioma del dispositivo).
-const I18N = window.I18N || { en: {}, meta: {}, ui: {} };
-let lang = root.lang === 'en' ? 'en' : 'es';
-const t = key => ((I18N.ui || {})[lang] || {})[key] || key;
+const EN = {
+  'nav.inicio': 'Home',
+  'nav.obras': 'Works',
+  'nav.contacto': 'Contact',
+  'nav.principal': 'Main',
+  'nav.pie': 'Footer',
+  'nav.inicioMarca': 'Moderato Studio, home',
+  'portada.aria': 'Home',
+  'conoce.a': 'Meet',
+  'conoce.p1': '<strong>Moderato</strong> is a tempo marking: neither fast nor slow. Measured, intentional, with just the right pulse.',
+  'conoce.p2': 'Under that name we make audiovisual essays. Each piece is written before filming, around a single idea and its sources. Music is the spine, and the image follows it <strong>unhurried</strong>, with careful light and time to look.',
+  'conoce.p3': 'What you see is what surrounds a piece of music: the practice room, the places, the books and the ideas that hold it up.',
+  'conoce.p4': 'This is <strong>Moderato Studio</strong>.',
+  'carrusel.aria': 'Stills',
+  'carrusel.rodaje': 'On set',
+  'carrusel.prev': 'Previous still',
+  'carrusel.next': 'Next still',
+  'alt.piano': 'A pianist plays a grand piano in a wood-panelled hall',
+  'alt.escucha': 'A man speaks in a study full of books and records',
+  'alt.conversacion': 'Two people talk, seated beside a grand piano',
+  'obras.titulo': 'Works',
+  'obras.hortus.linea': 'Audiovisual essay · Albéniz’s <i>Granada</i>, studied in Madrid',
+  'obras.estado.investigacion': 'In research',
+  'pie.lema': 'Composed in tempo moderato',
+  'obra.videoAria': 'Film',
+  'obra.enPreparacion': 'In preparation',
+  'obra.idea': 'The idea',
+  'obra.capitulos': 'Chapters',
+  'obra.ficha': 'Credits',
+  'obra.musica': 'Music',
+  'obra.fuentes': 'Sources',
+  'obra.catalogo': 'Catalogue',
+  'obra.todas': 'All works →',
+  'obra.volverAria': 'Back to the works',
+  'ficha.guion': 'Script',
+  'ficha.imagen': 'Image',
+  'ficha.lugar': 'Place',
+  'ficha.estado': 'Status',
+  'hortus.sello': 'Mod. I · Audiovisual essay · Working title · In research',
+  'hortus.tesis': 'The place of a piece is not on the map, but in the daily work of whoever plays it, who builds it anew each day like an enclosed garden.',
+  'hortus.idea1': 'Isaac Albéniz’s <i>Granada (Serenata)</i> was printed in Madrid in 1886. Today it is practised and recorded in Madrid. The film asks whether one can play a place where one is not.',
+  'hortus.idea2': 'It moves from day to night, like the serenade, which is a night song: the morning of slow practice, the afternoon of interpretation and the night of the enclosed garden.',
+  'hortus.citaFuente': '“A garden enclosed is my sister, my spouse.” Song of Songs 4:12',
+  'hortus.cap1': 'Morning · to execute',
+  'hortus.cap2': 'Afternoon · to interpret',
+  'hortus.cap3': 'Night · the enclosed garden'
+};
 
-function parseI18nAttrs(el) {
-  return el.dataset.i18nAttr.split(';').map(pair => pair.split(':').map(part => part.trim()));
-}
+const META_EN = {
+  inicio: ['Moderato Studio — Audiovisual essays', 'Moderato Studio makes audiovisual essays about what surrounds a piece of music: the practice room, the places and the books. Madrid.'],
+  hortus: ['Hortus conclusus — Mod. I · Moderato Studio', 'Mod. I, Hortus conclusus: an audiovisual essay on Isaac Albéniz’s Granada, studied in Madrid. In research.']
+};
 
-function splitLines(el) {
-  el.innerHTML = el.innerHTML
-    .split(/<br\s*\/?>/i)
-    .map((line, i) => `<span class="ln"><span style="--i:${i}">${line.trim()}</span></span>`)
-    .join('');
-  el.classList.add('is-split');
-}
+(function () {
+  const ES = {};
+  const META_ES = { title: document.title, desc: document.querySelector('meta[name="description"]')?.content || '' };
 
-const i18nEls = [...document.querySelectorAll('[data-i18n]')];
-const i18nAttrEls = [...document.querySelectorAll('[data-i18n-attr]')];
-const originalHTML = new Map(i18nEls.map(el => [el, el.innerHTML]));
-const originalAttrs = new Map(i18nAttrEls.map(el => [el, parseI18nAttrs(el).map(([attr]) => el.getAttribute(attr))]));
-const metaDescription = document.querySelector('meta[name="description"]');
-const originalMeta = [document.title, metaDescription ? metaDescription.content : ''];
-const langButtons = document.querySelectorAll('[data-lang]');
-
-const applyLang = next => {
-  lang = next;
-  root.lang = next;
-  const dict = next === 'es' ? null : (I18N[next] || {});
-
-  i18nEls.forEach(el => {
-    const original = originalHTML.get(el);
-    const value = dict && dict[el.dataset.i18n] !== undefined ? dict[el.dataset.i18n] : original;
-    if (value === original && !el.classList.contains('is-split') && el.innerHTML === original) return;
-    el.innerHTML = value;
-    if (el.hasAttribute('data-lines')) splitLines(el);
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const k = el.dataset.i18n;
+    if (!(k in ES)) ES[k] = el.innerHTML;
   });
-
-  i18nAttrEls.forEach(el => {
-    const originals = originalAttrs.get(el);
-    parseI18nAttrs(el).forEach(([attr, key], i) => {
-      el.setAttribute(attr, dict && dict[key] !== undefined ? dict[key] : originals[i]);
+  const ES_ATTR = new Map();
+  document.querySelectorAll('[data-i18n-attr]').forEach(el => {
+    el.dataset.i18nAttr.split(';').forEach(pair => {
+      const [attr] = pair.split(':');
+      ES_ATTR.set(el.tagName + attr + pair, el.getAttribute(attr.trim()));
     });
   });
 
-  const meta = (I18N.meta && I18N.meta[next] || {})[document.body.dataset.page];
-  document.title = meta ? meta[0] : originalMeta[0];
-  if (metaDescription) metaDescription.content = meta ? meta[1] : originalMeta[1];
-
-  langButtons.forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.lang === next)));
-  const toggle = document.querySelector('.nav-toggle');
-  if (toggle) toggle.setAttribute('aria-label', t(toggle.getAttribute('aria-expanded') === 'true' ? 'menuClose' : 'menuOpen'));
-  root.classList.remove('i18n-pending');
-};
-
-applyLang(lang);
-
-langButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const next = btn.dataset.lang;
-    if (next === lang) return;
-    try { localStorage.setItem('lang', next); } catch (e) { /* sin almacenamiento: solo esta visita */ }
-    if (reduceMotion) { applyLang(next); return; }
-    root.classList.add('lang-fade');
-    setTimeout(() => {
-      applyLang(next);
-      requestAnimationFrame(() => root.classList.remove('lang-fade'));
-    }, 220);
-  });
-});
-
-// ── CURSOR (nota musical) ──
-if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
-  const cursor = document.createElement('div');
-  cursor.className = 'cursor';
-  cursor.setAttribute('aria-hidden', 'true');
-  cursor.innerHTML = '<span class="cursor-stem"></span><span class="cursor-head"></span>';
-  document.body.appendChild(cursor);
-
-  let cx = 0, cy = 0, pending = false;
-  const render = () => {
-    cursor.style.transform = `translate3d(${cx}px, ${cy}px, 0)`;
-    pending = false;
-  };
-
-  // Color según el fondo real bajo el puntero (los botones cambian de relleno al hover)
-  const onDarkBg = el => {
-    const btn = el.closest('.btn-primary, .btn-outline');
-    if (btn) return btn.classList.contains('btn-outline') && !btn.closest('.on-dark');
-    return !!el.closest('.on-dark, .site-footer');
-  };
-
-  document.addEventListener('pointermove', e => {
-    if (e.pointerType !== 'mouse') return;
-    cx = e.clientX; cy = e.clientY;
-    if (!cursor.classList.contains('is-visible')) {
-      document.documentElement.classList.add('has-cursor');
-      cursor.classList.add('is-visible');
-      render();
+  function aplicar(lang) {
+    document.documentElement.lang = lang;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const k = el.dataset.i18n;
+      const t = lang === 'en' ? EN[k] : ES[k];
+      if (t !== undefined) el.innerHTML = t;
+    });
+    document.querySelectorAll('[data-i18n-attr]').forEach(el => {
+      el.dataset.i18nAttr.split(';').forEach(pair => {
+        const [attr, k] = pair.split(':').map(s => s.trim());
+        const t = lang === 'en' ? EN[k] : ES_ATTR.get(el.tagName + attr + pair);
+        if (t != null) el.setAttribute(attr, t);
+      });
+    });
+    const page = document.body.dataset.page;
+    const desc = document.querySelector('meta[name="description"]');
+    if (lang === 'en' && META_EN[page]) {
+      document.title = META_EN[page][0];
+      if (desc) desc.content = META_EN[page][1];
+    } else {
+      document.title = META_ES.title;
+      if (desc) desc.content = META_ES.desc;
     }
-    if (!pending) { pending = true; requestAnimationFrame(render); }
-  }, { passive: true });
-
-  document.addEventListener('pointerover', e => {
-    const el = e.target instanceof Element ? e.target : document.body;
-    cursor.classList.toggle('is-link', !!el.closest('a, button, label'));
-    cursor.classList.toggle('is-text', !!el.closest('input, textarea, select'));
-    cursor.classList.toggle('is-dark', onDarkBg(el));
-  });
-
-  document.addEventListener('pointerdown', () => cursor.classList.add('is-down'));
-  document.addEventListener('pointerup', () => cursor.classList.remove('is-down'));
-  document.documentElement.addEventListener('pointerleave', () => cursor.classList.remove('is-visible'));
-}
-
-// ── NAV ──
-const nav = document.getElementById('nav');
-const navToggle = document.querySelector('.nav-toggle');
-
-const setMenuState = isOpen => {
-  if (!nav || !navToggle) return;
-  nav.classList.toggle('menu-open', isOpen);
-  document.body.classList.toggle('menu-lock', isOpen);
-  navToggle.setAttribute('aria-expanded', String(isOpen));
-  navToggle.setAttribute('aria-label', t(isOpen ? 'menuClose' : 'menuOpen'));
-};
-
-if (navToggle) {
-  navToggle.addEventListener('click', () => setMenuState(!nav.classList.contains('menu-open')));
-  nav.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => setMenuState(false)));
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenuState(false); });
-  window.matchMedia('(min-width: 901px)').addEventListener('change', e => { if (e.matches) setMenuState(false); });
-}
-
-// ── SCROLL (un único listener, agrupado por frame) ──
-let lastY = window.scrollY;
-let ticking = false;
-
-const onScroll = () => {
-  const y = window.scrollY;
-
-  if (nav) {
-    nav.classList.toggle('scrolled', y > 40);
-    const goingDown = y > lastY + 4;
-    const goingUp = y < lastY - 4;
-    if (goingDown && y > 320 && !nav.classList.contains('menu-open')) nav.classList.add('is-hidden');
-    else if (goingUp || y < 320) nav.classList.remove('is-hidden');
-  }
-
-  lastY = y;
-  ticking = false;
-};
-
-window.addEventListener('scroll', () => {
-  if (!ticking) { ticking = true; requestAnimationFrame(onScroll); }
-}, { passive: true });
-onScroll();
-
-// ── TITULARES POR LÍNEAS ──
-document.querySelectorAll('[data-lines]:not(.is-split)').forEach(splitLines);
-
-// ── SCROLL REVEAL ──
-const revealTargets = document.querySelectorAll('.reveal, [data-lines], .staff, .method-step');
-
-if (reduceMotion || !('IntersectionObserver' in window)) {
-  revealTargets.forEach(el => el.classList.add('visible'));
-} else {
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        io.unobserve(entry.target);
-      }
+    document.querySelectorAll('[data-cambiar-idioma]').forEach(b => {
+      b.textContent = lang === 'en' ? 'ES' : 'EN';
+      b.setAttribute('aria-label', lang === 'en' ? 'Ver en español' : 'View in English');
     });
-  }, { rootMargin: '0px 0px -8% 0px' });
-  revealTargets.forEach(el => io.observe(el));
-}
-
-// ── BANDA PENTAGRAMA: se pausa fuera de pantalla ──
-const staffBand = document.querySelector('.staff-band');
-if (staffBand && 'IntersectionObserver' in window) {
-  new IntersectionObserver(([entry]) => {
-    staffBand.classList.toggle('is-paused', !entry.isIntersecting);
-  }).observe(staffBand);
-}
-
-// ── CIFRAS: contador de rodillo ──
-// Cada cifra es una tira 0–9 que gira hasta su valor; las unidades dan más vueltas.
-const stats = document.querySelector('.hero-stats');
-
-if (stats) {
-  stats.querySelectorAll('[data-count]').forEach(el => {
-    const value = el.dataset.count;
-    const digits = value.split('');
-    el.innerHTML = `<span class="sr-only">${value}</span>` + digits.map((digit, i) => {
-      const steps = (i + 1) * 10 + Number(digit);
-      let strip = '';
-      for (let k = 0; k <= steps; k++) strip += `<span>${k % 10}</span>`;
-      return `<span class="odo-col" aria-hidden="true" style="--steps:${steps};--i:${i}"><span class="odo-strip">${strip}</span></span>`;
-    }).join('');
-  });
-  stats.classList.add('is-ready');
-
-  const startCount = () => setTimeout(() => stats.classList.add('is-counting'), reduceMotion ? 0 : 650);
-  if ('IntersectionObserver' in window) {
-    const statsIO = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) { startCount(); statsIO.disconnect(); }
-    });
-    statsIO.observe(stats);
-  } else {
-    startCount();
-  }
-}
-
-// ── FORMULARIO DE CONTACTO ──
-const contactForm = document.querySelector('.contact-form');
-
-if (contactForm) {
-  const serviceSelect = contactForm.querySelector('#tipo-proyecto');
-  const preset = new URLSearchParams(window.location.search).get('servicio');
-  if (serviceSelect && preset && serviceSelect.querySelector(`option[value="${CSS.escape(preset)}"]`)) {
-    serviceSelect.value = preset;
   }
 
-  contactForm.addEventListener('submit', e => {
-    e.preventDefault();
-    if (!contactForm.reportValidity()) return;
+  function guardado() { try { return localStorage.getItem('idioma'); } catch (e) { return null; } }
+  function guardar(v) { try { localStorage.setItem('idioma', v); } catch (e) {} }
 
-    const data = new FormData(contactForm);
-    const service = serviceSelect && serviceSelect.value ? serviceSelect.selectedOptions[0].textContent : t('project');
-    const subject = `${service} · ${data.get('nombre')}`;
-    const body = `${data.get('mensaje')}\n\n— ${data.get('nombre')} (${data.get('email')})`;
-    window.location.href = `mailto:${contactForm.dataset.to}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-  });
-}
+  const nav = (navigator.language || 'es').slice(0, 2).toLowerCase();
+  let lang = guardado() || (['es', 'ca', 'gl', 'eu'].includes(nav) ? 'es' : 'en');
+  if (lang !== 'es') aplicar(lang); else aplicar('es');
+
+  document.querySelectorAll('[data-cambiar-idioma]').forEach(b => b.addEventListener('click', () => {
+    lang = lang === 'es' ? 'en' : 'es';
+    guardar(lang);
+    aplicar(lang);
+  }));
+
+  /* Carrusel */
+  const pista = document.querySelector('[data-carrusel]');
+  if (pista) {
+    const prev = document.querySelector('[data-carrusel-prev]');
+    const next = document.querySelector('[data-carrusel-next]');
+    const paso = () => (pista.querySelector('figure')?.offsetWidth || 600) + 16;
+    const estado = () => {
+      prev.disabled = pista.scrollLeft < 8;
+      next.disabled = pista.scrollLeft + pista.clientWidth >= pista.scrollWidth - 8;
+    };
+    prev.addEventListener('click', () => pista.scrollBy({ left: -paso(), behavior: 'smooth' }));
+    next.addEventListener('click', () => pista.scrollBy({ left: paso(), behavior: 'smooth' }));
+    pista.addEventListener('scroll', estado, { passive: true });
+    window.addEventListener('resize', estado);
+    estado();
+  }
+
+  document.querySelectorAll('[data-anio]').forEach(el => { el.textContent = new Date().getFullYear(); });
+})();

@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Entrega privada · Moderato Studio</title>
+  <meta name="theme-color" content="#1E1B18">
+  <link rel="icon" href="../../favicon.ico" sizes="any">
+  <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../css/tokens.css">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/entregas.css">
+  <script src="../entrega.js" defer></script>
+
+  <!--
+    DATOS DE LA ENTREGA: lo único que se cambia en cada copia de esta carpeta.
+    - carpeta: enlace de la carpeta de Google Drive compartida como «Cualquier persona con el enlace · Lector».
+    - videos / fotos / archivos: el ID de cada archivo de Drive es la parte del enlace entre /d/ y /view
+      (https://drive.google.com/file/d/ID/view). Cada archivo debe estar compartido igual que la carpeta.
+    - fotos: muestra de 3 a 9 fotografías; el resto se ve en la carpeta.
+    - Las listas pueden quedar vacías ([]): esa parte no se muestra.
+  -->
+  <script type="application/json" id="entrega">
+  {
+    "numero": "000",
+    "titulo": "Título del proyecto",
+    "cliente": "Nombre del cliente",
+    "lugar": "Lugar",
+    "fechaRodaje": "1 de enero de 2027",
+    "fechaEntrega": "15 de enero de 2027",
+    "disponibleHasta": "15 de julio de 2027",
+    "contenido": "48 fotografías · 2 vídeos",
+    "tamano": "12 GB",
+    "carpeta": "https://drive.google.com/drive/folders/ID_DE_LA_CARPETA",
+    "videos": [
+      { "titulo": "Pieza principal", "detalle": "12:48 · 4K · 6,1 GB", "id": "ID_DEL_VIDEO" }
+    ],
+    "fotos": [
+      { "id": "ID_DE_LA_FOTO_1" },
+      { "id": "ID_DE_LA_FOTO_2" },
+      { "id": "ID_DE_LA_FOTO_3" }
+    ],
+    "archivos": [
+      { "nombre": "fotografias-alta-resolucion.zip", "contenido": "48 fotografías · JPG", "tamano": "5,4 GB", "id": "ID_DEL_ARCHIVO" }
+    ]
+  }
+  </script>
+</head>
+<body data-page="entrega">
+
+  <header class="cabecera cabecera--fija">
+    <div class="contenedor">
+      <a class="logotipo" href="https://moderatostudio.com" aria-label="Moderato Studio">
+        <img class="m" src="../../assets/marca/m-crema.svg" alt="" width="1223" height="466">
+        <span class="logotipo__texto">MODERATO<br>STUDIO</span>
+      </a>
+      <div class="nav etiqueta">
+        <span data-t="privada">Entrega privada · acceso por enlace</span>
+        <span class="nav__sep" aria-hidden="true"></span>
+        <button type="button" class="idioma" data-idioma-entrega>EN</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="contenido-entrega">
+    <noscript><p class="contenedor">Activa JavaScript para ver la entrega, o escríbenos a moderatostudio.es@gmail.com.</p></noscript>
+  </main>
+
+  <footer class="pie">
+    <img class="pie__marca-agua" src="../../assets/marca/m-sombra.svg" alt="" aria-hidden="true" width="1223" height="466">
+    <div class="contenedor">
+      <div class="pie__fila">
+        <div class="entrega-ayuda">
+          <span data-t="ayuda">¿Algún problema con la descarga?</span>
+          <a href="mailto:moderatostudio.es@gmail.com">moderatostudio.es@gmail.com</a>
+        </div>
+        <span class="logotipo">
+          <img class="m" src="../../assets/marca/m-sombra.svg" alt="" width="1223" height="466">
+          <span class="logotipo__texto">MODERATO<br>STUDIO</span>
+        </span>
+        <span class="pie__lema" data-t="lema">Compuesto en tempo moderato</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

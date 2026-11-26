@@ -1,0 +1,30 @@
+/* Moderato Studio — tokens de diseño
+   Fuente: identidad/01-identidad-visual-moderato.md (v1.1).
+   Todos los colores, fuentes y medidas de la web salen de aquí. */
+
+:root {
+  /* Color */
+  --sombra: #1E1B18;   /* fondo principal */
+  --noche: #141210;    /* fondos de vídeo e imagen, bandas */
+  --panel: #2A2622;    /* superficies, marcos */
+  --crema: #F6F1EA;    /* texto sobre oscuro; papel; pie */
+  --arena: #E5DED1;    /* texto secundario sobre oscuro */
+  --laton: #C9AE7E;    /* solo acentos: líneas finas, aros */
+  --piedra: #A39A8C;   /* etiquetas y metadatos sobre oscuro */
+  --linea: #3A352F;    /* separadores sobre oscuro */
+  --gris-pie: #6B645A; /* texto secundario sobre crema */
+
+  /* Tipografía */
+  --serif: 'Cormorant Garamond', Garamond, Georgia, serif;
+  --sans: 'Hanken Grotesk', Arial, Helvetica, sans-serif;
+
+  --t-seccion: clamp(46px, 7vw, 84px);
+  --t-obra: clamp(25px, 2.6vw, 32px);
+  --t-texto: clamp(18px, 1.5vw, 20px);
+  --t-etiqueta: 13px;
+
+  /* Medidas */
+  --ancho: 1360px;
+  --margen: clamp(20px, 4vw, 40px);
+  --entre-secciones: clamp(96px, 12vw, 160px);
+}
