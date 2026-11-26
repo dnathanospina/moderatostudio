@@ -18,6 +18,9 @@ Un sello de **ensayos audiovisuales**: piezas sobre lo que ocurre alrededor de u
 - `assets/img/` — Portada, fotogramas e imagen para compartir (`og-image.jpg`, 1200 × 630).
 - `assets/logos/` — Logos de la etapa anterior (verde). Ya no se usan; se conservan como archivo.
 
+## Caché
+Los enlaces a CSS y JS llevan `?v=AAAAMMDDHHMM`. **Al cambiar un CSS o JS, actualizar ese número en todas las páginas**; si no, móviles y tablets siguen usando la versión guardada.
+
 ## Favicon
 - `favicon.svg`: solo la M, sin fondo; sombra en navegador claro y crema en oscuro (`prefers-color-scheme`).
 - `favicon.ico` (16/32/48): la M sombra sin fondo, para navegadores antiguos.

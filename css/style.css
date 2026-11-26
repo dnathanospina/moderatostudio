@@ -57,7 +57,7 @@ h1, h2, h3 { margin: 0; font-weight: 300; line-height: 1; }
 
 /* Carrusel de fotogramas */
 .carrusel { padding-bottom: var(--entre-secciones); display: flex; flex-direction: column; gap: 20px; }
-.carrusel__pista { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-left: var(--margen); scroll-padding-left: var(--margen); }
+.carrusel__pista { -webkit-overflow-scrolling: touch; overscroll-behavior-x: contain; display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-left: var(--margen); scroll-padding-left: var(--margen); }
 .carrusel__pista::-webkit-scrollbar { display: none; }
 .carrusel__pista figure { margin: 0; flex: 0 0 min(82vw, 1040px); scroll-snap-align: start; display: flex; flex-direction: column; gap: 12px; }
 .carrusel__pista img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: var(--panel); }
@@ -131,7 +131,8 @@ h1, h2, h3 { margin: 0; font-weight: 300; line-height: 1; }
 .fotogramas__pista figure:last-child { margin-right: 0; }
 .fotogramas__pista img { aspect-ratio: 4 / 5; }
 .fotogramas__pista figcaption { text-align: center; }
-@media (max-width: 820px) { .fotogramas__pista figure { flex-basis: 72vw; } }
+@media (max-width: 1100px) { .fotogramas__pista figure { flex-basis: calc((100vw - 2 * var(--margen) - 16px) / 2.15); } }
+@media (max-width: 640px) { .fotogramas__pista figure { flex-basis: 78vw; } }
 
 /* Movimiento al desplazarse: aparece despacio, sin prisa */
 .portada__imagen { will-change: transform; transform: scale(1.08); }
