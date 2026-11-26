@@ -15,10 +15,19 @@ const EN = {
   'conoce.p2': 'Under that name we make audiovisual essays. Each piece is written before filming, around a single idea and its sources. Music is the spine, and the image follows it <strong>unhurried</strong>, with careful light and time to look.',
   'conoce.p3': 'What you see is what surrounds a piece of music: the practice room, the places, the books and the ideas that hold it up.',
   'conoce.p4': 'This is <strong>Moderato Studio</strong>.',
-  'carrusel.aria': 'Stills',
+  'carrusel.aria': 'Featured stills',
   'carrusel.rodaje': 'On set',
-  'carrusel.prev': 'Previous still',
-  'carrusel.next': 'Next still',
+  'carrusel.prev': 'Previous',
+  'carrusel.next': 'Next',
+  'nav.fotogramas': 'Stills',
+  'fotogramas.titulo': 'Stills',
+  'fotogramas.momento': 'The musical moment',
+  'fotogramas.estudio': 'The study, in the foreground',
+  'fotogramas.palabra': 'The spoken word',
+  'fotogramas.atocha': 'Atocha, at dusk',
+  'alt.dosPianos': 'Two musicians talk, seated between two grand pianos',
+  'alt.atocha': 'Atocha station at dusk, with traffic in front',
+  'alt.palabra': 'A man explains something with his hands, beside a piano',
   'alt.piano': 'A pianist plays a grand piano in a wood-panelled hall',
   'alt.escucha': 'A man speaks in a study full of books and records',
   'alt.conversacion': 'Two people talk, seated beside a grand piano',
@@ -113,21 +122,80 @@ const META_EN = {
     aplicar(lang);
   }));
 
-  /* Carrusel */
-  const pista = document.querySelector('[data-carrusel]');
-  if (pista) {
-    const prev = document.querySelector('[data-carrusel-prev]');
-    const next = document.querySelector('[data-carrusel-next]');
+  const quieto = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Carruseles: flechas, teclado y arrastre con el ratón */
+  document.querySelectorAll('[data-carrusel]').forEach(pista => {
+    const caja = pista.closest('section');
+    const prev = caja.querySelector('[data-carrusel-prev]');
+    const next = caja.querySelector('[data-carrusel-next]');
     const paso = () => (pista.querySelector('figure')?.offsetWidth || 600) + 16;
     const estado = () => {
-      prev.disabled = pista.scrollLeft < 8;
-      next.disabled = pista.scrollLeft + pista.clientWidth >= pista.scrollWidth - 8;
+      if (prev) prev.disabled = pista.scrollLeft < 8;
+      if (next) next.disabled = pista.scrollLeft + pista.clientWidth >= pista.scrollWidth - 8;
     };
-    prev.addEventListener('click', () => pista.scrollBy({ left: -paso(), behavior: 'smooth' }));
-    next.addEventListener('click', () => pista.scrollBy({ left: paso(), behavior: 'smooth' }));
+    const mover = d => pista.scrollBy({ left: d * paso(), behavior: quieto ? 'auto' : 'smooth' });
+    prev && prev.addEventListener('click', () => mover(-1));
+    next && next.addEventListener('click', () => mover(1));
+    pista.addEventListener('keydown', e => {
+      if (e.key === 'ArrowRight') { e.preventDefault(); mover(1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); mover(-1); }
+    });
+    let x0 = 0, s0 = 0, abajo = false, movido = false;
+    pista.addEventListener('pointerdown', e => {
+      if (e.pointerType !== 'mouse') return;
+      abajo = true; movido = false; x0 = e.clientX; s0 = pista.scrollLeft;
+    });
+    window.addEventListener('pointermove', e => {
+      if (!abajo) return;
+      const dx = e.clientX - x0;
+      if (Math.abs(dx) > 4) { movido = true; pista.classList.add('arrastrando'); }
+      pista.scrollLeft = s0 - dx;
+    });
+    window.addEventListener('pointerup', () => {
+      if (!abajo) return;
+      abajo = false;
+      if (movido) {
+        pista.classList.remove('arrastrando');
+        const i = Math.round(pista.scrollLeft / paso());
+        pista.scrollTo({ left: i * paso(), behavior: quieto ? 'auto' : 'smooth' });
+      }
+    });
     pista.addEventListener('scroll', estado, { passive: true });
     window.addEventListener('resize', estado);
     estado();
+  });
+
+  /* Aparición al desplazarse */
+  const revelables = document.querySelectorAll('.revelar');
+  if ('IntersectionObserver' in window && !quieto) {
+    const io = new IntersectionObserver(entradas => {
+      entradas.forEach(en => {
+        if (en.isIntersecting) { en.target.classList.add('visible'); io.unobserve(en.target); }
+      });
+    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.08 });
+    revelables.forEach(el => io.observe(el));
+  } else {
+    revelables.forEach(el => el.classList.add('visible'));
+  }
+
+  /* Portada: la imagen baja más despacio y la marca se desvanece */
+  const fondo = document.querySelector('[data-paralaje]');
+  const marca = document.querySelector('[data-desvanecer]');
+  if (fondo && !quieto) {
+    let pendiente = false;
+    const pintar = () => {
+      pendiente = false;
+      const y = Math.min(window.scrollY, window.innerHeight);
+      const h = window.innerHeight || 800;
+      fondo.style.transform = `translate3d(0, ${y * 0.35}px, 0) scale(1.08)`;
+      if (marca) {
+        marca.style.opacity = String(Math.max(0, 1 - y / (h * 0.55)));
+        marca.style.transform = `translate3d(0, ${y * 0.18}px, 0)`;
+      }
+    };
+    window.addEventListener('scroll', () => { if (!pendiente) { pendiente = true; requestAnimationFrame(pintar); } }, { passive: true });
+    pintar();
   }
 
   document.querySelectorAll('[data-anio]').forEach(el => { el.textContent = new Date().getFullYear(); });

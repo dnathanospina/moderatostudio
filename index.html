@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/style.css">
   <script src="js/main.js" defer></script>
+  <script>document.documentElement.classList.add('js')</script>
 </head>
 <body data-page="inicio">
 
@@ -28,6 +29,8 @@
       <a href="#inicio" data-i18n="nav.inicio">Inicio</a>
       <nav class="nav" aria-label="Principal" data-i18n-attr="aria-label:nav.principal">
         <a href="#obras" data-i18n="nav.obras">Obras</a>
+        <span class="nav__sep" aria-hidden="true"></span>
+        <a href="#fotogramas" data-i18n="nav.fotogramas">Fotogramas</a>
         <span class="nav__sep" aria-hidden="true"></span>
         <a href="#contacto" data-i18n="nav.contacto">Contacto</a>
         <span class="nav__sep" aria-hidden="true"></span>
@@ -38,8 +41,8 @@
 
   <main>
     <section id="inicio" class="portada" aria-label="Portada" data-i18n-attr="aria-label:portada.aria">
-      <img class="portada__imagen" src="assets/img/portada.jpg" alt="" width="1600" height="900">
-      <div class="portada__marca">
+      <img class="portada__imagen" data-paralaje src="assets/img/portada.jpg" alt="" width="1600" height="900">
+      <div class="portada__marca" data-desvanecer>
         <h1 class="logotipo">
           <img class="m" src="assets/marca/m-crema.svg" alt="" width="1223" height="466">
           <span class="logotipo__texto">MODERATO<br>STUDIO</span>
@@ -49,12 +52,12 @@
     </section>
 
     <section id="estudio" class="conoce contenedor" aria-labelledby="conoce-titulo">
-      <div class="conoce__titulo" id="conoce-titulo">
+      <div class="conoce__titulo revelar" id="conoce-titulo">
         <h2 class="titulo-seccion" data-i18n="conoce.a">Conoce</h2>
         <img class="m" src="assets/marca/m-crema.svg" alt="" aria-hidden="true" width="1223" height="466">
         <h2 class="titulo-seccion">Moderato</h2>
       </div>
-      <div class="conoce__texto">
+      <div class="conoce__texto revelar">
         <p data-i18n="conoce.p1"><strong>Moderato</strong> es una indicación de tempo: ni deprisa ni despacio. Con medida, con intención y con el pulso justo.</p>
         <p data-i18n="conoce.p2">Bajo ese nombre se hacen ensayos audiovisuales. Cada pieza se escribe antes de rodar, con una sola idea y sus fuentes. La música es su columna, y la imagen la sigue <strong>sin prisa</strong>, con luz cuidada y tiempo para mirar.</p>
         <p data-i18n="conoce.p3">Lo que se ve es lo que ocurre alrededor de una obra: el estudio, los lugares, los libros y las ideas que la sostienen.</p>
@@ -62,30 +65,30 @@
       </div>
     </section>
 
-    <section class="carrusel" aria-label="Fotogramas" data-i18n-attr="aria-label:carrusel.aria">
+    <section class="carrusel revelar" aria-label="Fotogramas destacados" data-i18n-attr="aria-label:carrusel.aria">
       <div class="carrusel__pista" data-carrusel tabindex="0">
         <figure>
-          <img src="assets/img/rodaje-piano.jpg" alt="Un pianista toca un piano de cola en una sala de madera" data-i18n-attr="alt:alt.piano" width="800" height="450" loading="lazy">
-          <figcaption class="etiqueta" data-i18n="carrusel.rodaje">Rodaje</figcaption>
+          <img src="assets/img/rodaje-dos-pianos.jpg" alt="Dos músicos conversan sentados entre dos pianos de cola" data-i18n-attr="alt:alt.dosPianos" width="800" height="450" loading="lazy">
+          <figcaption class="etiqueta"><i>Mientras nadie aplaude</i> · Ep. I</figcaption>
         </figure>
         <figure>
-          <img src="assets/img/rodaje-escucha.jpg" alt="Un hombre habla en un estudio lleno de libros y discos" data-i18n-attr="alt:alt.escucha" width="800" height="450" loading="lazy">
-          <figcaption class="etiqueta" data-i18n="carrusel.rodaje">Rodaje</figcaption>
+          <img src="assets/img/atocha.jpg" alt="La estación de Atocha al atardecer, con tráfico delante" data-i18n-attr="alt:alt.atocha" width="800" height="450" loading="lazy">
+          <figcaption class="etiqueta"><i>Mientras nadie aplaude</i> · Ep. I</figcaption>
         </figure>
         <figure>
           <img src="assets/img/rodaje-conversacion.jpg" alt="Dos personas conversan sentadas junto a un piano de cola" data-i18n-attr="alt:alt.conversacion" width="800" height="450" loading="lazy">
-          <figcaption class="etiqueta" data-i18n="carrusel.rodaje">Rodaje</figcaption>
+          <figcaption class="etiqueta"><i>Mientras nadie aplaude</i> · Ep. II</figcaption>
         </figure>
       </div>
       <div class="carrusel__flechas">
-        <button type="button" class="flecha" data-carrusel-prev aria-label="Fotograma anterior" data-i18n-attr="aria-label:carrusel.prev">←</button>
-        <button type="button" class="flecha" data-carrusel-next aria-label="Fotograma siguiente" data-i18n-attr="aria-label:carrusel.next">→</button>
+        <button type="button" class="flecha" data-carrusel-prev aria-label="Anterior" data-i18n-attr="aria-label:carrusel.prev">←</button>
+        <button type="button" class="flecha" data-carrusel-next aria-label="Siguiente" data-i18n-attr="aria-label:carrusel.next">→</button>
       </div>
     </section>
 
     <section id="obras" class="obras contenedor" aria-labelledby="obras-titulo">
-      <h2 class="titulo-seccion" id="obras-titulo" data-i18n="obras.titulo">Obras</h2>
-      <ol class="obras__lista">
+      <h2 class="titulo-seccion revelar" id="obras-titulo" data-i18n="obras.titulo">Obras</h2>
+      <ol class="obras__lista revelar">
         <li>
           <a class="obra-fila" href="obras/hortus-conclusus.html">
             <span class="obra-fila__num"><span>I</span><span class="etiqueta">Mod.</span></span>
@@ -97,6 +100,34 @@
           </a>
         </li>
       </ol>
+    </section>
+
+    <section id="fotogramas" class="fotogramas" aria-labelledby="fotogramas-titulo">
+      <h2 class="titulo-seccion contenedor revelar" id="fotogramas-titulo" data-i18n="fotogramas.titulo">Fotogramas</h2>
+      <div class="fotogramas__marco revelar">
+        <div class="carrusel__pista fotogramas__pista" data-carrusel tabindex="0">
+          <figure>
+            <img src="assets/img/rodaje-piano.jpg" alt="Un pianista toca un piano de cola en una sala de madera" data-i18n-attr="alt:alt.piano" width="800" height="450" loading="lazy">
+            <figcaption class="etiqueta" data-i18n="fotogramas.momento">El momento musical</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/img/rodaje-escucha.jpg" alt="Un hombre habla en un estudio lleno de libros y discos" data-i18n-attr="alt:alt.escucha" width="800" height="450" loading="lazy">
+            <figcaption class="etiqueta" data-i18n="fotogramas.estudio">El estudio, en primer término</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/img/rodaje-palabra.jpg" alt="Un hombre explica algo con las manos, junto a un piano" data-i18n-attr="alt:alt.palabra" width="800" height="450" loading="lazy">
+            <figcaption class="etiqueta" data-i18n="fotogramas.palabra">La palabra</figcaption>
+          </figure>
+          <figure>
+            <img src="assets/img/atocha.jpg" alt="La estación de Atocha al atardecer, con tráfico delante" data-i18n-attr="alt:alt.atocha" width="800" height="450" loading="lazy">
+            <figcaption class="etiqueta" data-i18n="fotogramas.atocha">Atocha, al atardecer</figcaption>
+          </figure>
+        </div>
+        <div class="carrusel__flechas">
+          <button type="button" class="flecha" data-carrusel-prev aria-label="Anterior" data-i18n-attr="aria-label:carrusel.prev">←</button>
+          <button type="button" class="flecha" data-carrusel-next aria-label="Siguiente" data-i18n-attr="aria-label:carrusel.next">→</button>
+        </div>
+      </div>
     </section>
   </main>
 
