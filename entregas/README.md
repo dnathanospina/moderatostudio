@@ -23,3 +23,12 @@ Borrar su carpeta de `entregas/` y, si se quiere, la carpeta de Drive. Guardar s
 - La carpeta `plantilla/` es solo el modelo: no se envía a nadie.
 - Los textos de la página (ES/EN) están en `entregas/entrega.js`; el diseño, en `css/entregas.css`.
 - Si más adelante se pasa a la opción B (Cloudflare R2 con contraseña), el diseño se reutiliza tal cual.
+
+## Entrega con contraseña
+
+1. Copia `plantilla/` a `entregas/<codigo-aleatorio>/`.
+2. Prepara los datos en un `datos.json` **fuera del repositorio** (mismo formato que el bloque de la plantilla; `fotos` puede ser la lista completa `[["ID", "nombre"], …]`).
+3. `python3 entregas/cifrar.py datos.json entregas/<codigo>/index.html "contraseña"`
+4. Publica. La página pide la contraseña y solo entonces descifra y muestra la entrega (AES-256-GCM, PBKDF2 600.000 iteraciones).
+   La lista de fotos y los enlaces de Drive nunca quedan en claro en el repositorio.
+5. Manda el enlace y la contraseña al cliente por canales distintos.

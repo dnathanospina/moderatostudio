@@ -12,17 +12,19 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Hanken+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../css/tokens.css?v=202611270018">
-  <link rel="stylesheet" href="../../css/style.css?v=202611270018">
-  <link rel="stylesheet" href="../../css/entregas.css?v=202611270018">
-  <script src="../entrega.js?v=202611270018" defer></script>
+  <link rel="stylesheet" href="../../css/tokens.css?v=202611271000">
+  <link rel="stylesheet" href="../../css/style.css?v=202611271000">
+  <link rel="stylesheet" href="../../css/entregas.css?v=202611271000">
+  <script src="../entrega.js?v=202611271000" defer></script>
 
   <!--
     DATOS DE LA ENTREGA: lo único que se cambia en cada copia de esta carpeta.
     - carpeta: enlace de la carpeta de Google Drive compartida como «Cualquier persona con el enlace · Lector».
     - videos / fotos / archivos: el ID de cada archivo de Drive es la parte del enlace entre /d/ y /view
       (https://drive.google.com/file/d/ID/view). Cada archivo debe estar compartido igual que la carpeta.
-    - fotos: muestra de 3 a 9 fotografías; el resto se ve en la carpeta.
+    - fotos: lista de fotografías, o el nombre de un archivo JSON en la misma carpeta ("fotos.json")
+      con [["ID", "nombre"], …] para entregas grandes: se muestran todas en miniatura, con visor y descarga.
+    - disponibleHasta puede quedar vacío (""): no se muestra.
     - Las listas pueden quedar vacías ([]): esa parte no se muestra.
   -->
   <script type="application/json" id="entrega">

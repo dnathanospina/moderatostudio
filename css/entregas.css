@@ -26,9 +26,28 @@
 .entrega-lista em { flex: 1 1 280px; font-size: 25px; }
 .entrega-lista a { font-family: var(--sans); font-size: 13px; text-decoration: underline; text-underline-offset: 4px; min-height: 44px; display: inline-flex; align-items: center; }
 
-.entrega-fotos { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 360px), 1fr)); gap: 16px; }
-.entrega-fotos figure { margin: 0; display: flex; flex-direction: column; gap: 10px; }
-.entrega-fotos img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; background: var(--panel); }
+.entrega-fotos { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.entrega-fotos figure { margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.entrega-fotos button { padding: 0; border: 0; background: var(--panel); cursor: zoom-in; display: block; width: 100%; }
+.entrega-fotos img { width: 100%; height: auto; aspect-ratio: 3 / 2; object-fit: cover; display: block; transition: opacity .2s; }
+.entrega-fotos button:hover img, .entrega-fotos button:focus-visible img { opacity: .8; }
+.entrega-fotos figcaption { font-size: 11px; }
+@media (max-width: 600px) { .entrega-fotos { grid-template-columns: repeat(3, 1fr); gap: 6px; } .entrega-fotos figcaption { display: none; } }
+
+.sin-scroll { overflow: hidden; }
+.visor { position: fixed; inset: 0; z-index: 100; background: var(--noche); display: grid; grid-template-rows: auto 1fr auto; }
+.visor[hidden] { display: none; }
+.visor__barra { display: flex; justify-content: space-between; align-items: center; padding: 12px var(--margen); }
+.visor__barra > div { display: flex; gap: 20px; align-items: baseline; }
+.visor__num { color: var(--crema); }
+.visor__escena { position: relative; display: flex; align-items: center; justify-content: center; min-height: 0; padding: 0 var(--margen); }
+.visor__img { max-width: 100%; max-height: 100%; object-fit: contain; }
+.visor__cerrar, .visor__flecha { background: none; border: 0; color: var(--crema); font-family: var(--serif); font-weight: 300; cursor: pointer; min-width: 48px; min-height: 48px; }
+.visor__cerrar { font-size: 40px; line-height: 1; }
+.visor__flecha { position: absolute; top: 50%; transform: translateY(-50%); font-size: 64px; padding: 0 12px; }
+.visor__flecha--ant { left: 0; } .visor__flecha--sig { right: 0; }
+.visor__pie { display: flex; justify-content: center; padding: 16px var(--margen) 24px; }
+@media (max-width: 600px) { .visor__flecha { display: none; } .visor__nombre { display: none; } }
 
 .entrega-tabla { overflow-x: auto; }
 .entrega-tabla table { width: 100%; min-width: 620px; border-collapse: collapse; font-family: var(--sans); font-size: 14px; }
@@ -41,3 +60,17 @@
 .entrega-nota { padding-bottom: var(--entre-secciones); display: flex; flex-direction: column; gap: 12px; max-width: calc(640px + 2 * var(--margen)); margin-left: max(0px, calc((100vw - var(--ancho)) / 2)); color: var(--arena); }
 .entrega-ayuda { display: flex; flex-direction: column; gap: 4px; font-size: 18px; line-height: 1.5; }
 .entrega-ayuda a { font-weight: 600; }
+
+.entrega-clave { min-height: 70vh; padding-block: 140px 120px; display: flex; flex-direction: column; gap: 28px; max-width: calc(560px + 2 * var(--margen)); margin-left: max(0px, calc((100vw - var(--ancho)) / 2)); }
+.entrega-clave h1 { font-size: var(--t-seccion); line-height: 1; }
+.entrega-clave__texto { font-size: var(--t-texto); color: var(--arena); }
+.entrega-clave__form { display: flex; flex-direction: column; gap: 10px; }
+.entrega-clave__fila { display: flex; gap: 12px; flex-wrap: wrap; }
+.entrega-clave__fila input { flex: 1 1 220px; min-height: 52px; padding: 0 16px; background: transparent; border: 1px solid var(--linea); color: var(--crema); font-family: var(--sans); font-size: 16px; }
+.entrega-clave__fila input:focus { outline: none; border-color: var(--laton); }
+.entrega-clave__fila .boton { border: 0; cursor: pointer; }
+.entrega-clave__fila .boton:disabled { opacity: .6; cursor: progress; }
+.entrega-clave__recordar { display: inline-flex; gap: 10px; align-items: center; min-height: 44px; cursor: pointer; }
+.entrega-clave__recordar input { accent-color: var(--laton); width: 16px; height: 16px; }
+.entrega-clave__aviso { min-height: 1.5em; font-family: var(--sans); font-size: 14px; color: var(--laton); }
+@media (max-width: 600px) { .cabecera [data-t="privada"], .cabecera .nav__sep { display: none; } }
