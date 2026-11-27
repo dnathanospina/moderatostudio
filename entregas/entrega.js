@@ -19,7 +19,7 @@
       foto: n => `Fotografía ${n}`, boton: 'EN', botonAria: 'View in English',
       fotosN: n => `${n.toLocaleString('es-ES')} fotografías. Pulsa una para verla en grande y descargarla en calidad completa.`,
       descargar: 'Descargar en calidad completa', cerrar: 'Cerrar', anterior: 'Anterior', siguiente: 'Siguiente',
-      cargando: 'Cargando fotografías…',
+      cargando: 'Cargando fotografías…', arriba: 'Volver arriba',
       notaSin: 'Conviene descargar los archivos y guardar una copia.',
       claveTitulo: 'Entrega privada', claveTexto: 'Escribe la contraseña que te hemos enviado para ver la entrega.',
       claveCampo: 'Contraseña', claveEntrar: 'Entrar', claveRecordar: 'Recordar en este dispositivo',
@@ -40,7 +40,7 @@
       foto: n => `Photograph ${n}`, boton: 'ES', botonAria: 'Ver en español',
       fotosN: n => `${n.toLocaleString('en-GB')} photographs. Tap one to view it large and download it in full quality.`,
       descargar: 'Download full quality', cerrar: 'Close', anterior: 'Previous', siguiente: 'Next',
-      cargando: 'Loading photographs…',
+      cargando: 'Loading photographs…', arriba: 'Back to top',
       notaSin: 'Please download the files and keep a copy.',
       claveTitulo: 'Private delivery', claveTexto: 'Enter the password we sent you to view the delivery.',
       claveCampo: 'Password', claveEntrar: 'Enter', claveRecordar: 'Remember on this device',
@@ -77,6 +77,7 @@
   function pintar(lang) {
     const t = T[lang];
     document.documentElement.lang = lang;
+    arriba.setAttribute('aria-label', t.arriba); arriba.title = t.arriba;
     document.querySelectorAll('[data-t]').forEach(n => { n.textContent = t[n.dataset.t]; });
     if (bloqueCifrado) document.querySelector('[data-t="privada"]').textContent = t.privadaClave;
     const b = document.querySelector('[data-idioma-entrega]');
@@ -96,6 +97,11 @@
           datos.tamano ? el('div', {}, el('dt', {}, t.tamano), el('dd', {}, datos.tamano)) : null,
           datos.disponibleHasta ? el('div', {}, el('dt', {}, t.hasta), el('dd', {}, datos.disponibleHasta)) : null),
         el('a', { class: 'boton', href: datos.carpeta, target: '_blank', rel: 'noopener' }, t.carpeta))));
+
+    main.append(el('section', { class: 'entrega-nota contenedor' },
+      el('p', {}, datos.disponibleHasta ? t.nota(datos.disponibleHasta) : t.notaSin),
+      el('p', { class: 'etiqueta' }, t.notaDrive),
+      el('p', { class: 'etiqueta' }, `${t.ayuda} `, el('a', { class: 'subrayado-fino', href: 'mailto:moderatostudio.es@gmail.com' }, 'moderatostudio.es@gmail.com'))));
 
     if (datos.videos && datos.videos.length) {
       const sec = el('section', { class: 'entrega-seccion contenedor' }, cabeceraSeccion(n++, t.video));
@@ -147,9 +153,6 @@
       main.append(sec);
     }
 
-    main.append(el('section', { class: 'entrega-nota contenedor' },
-      el('p', {}, datos.disponibleHasta ? t.nota(datos.disponibleHasta) : t.notaSin),
-      el('p', { class: 'etiqueta' }, t.notaDrive)));
   }
 
   /* Visor: vista previa grande, flechas, teclado, gesto lateral y descarga del original */
@@ -212,6 +215,12 @@
   const nav = (navigator.language || 'es').slice(0, 2).toLowerCase();
   let lang = guardado() || (['es', 'ca', 'gl', 'eu'].includes(nav) ? 'es' : 'en');
   let pintarTodo = l => { langActual = l; pintar(l); };
+
+  /* Botón flotante para volver arriba, donde están la carpeta y los datos de la entrega */
+  const arriba = el('button', { type: 'button', class: 'entrega-arriba', hidden: '' }, '↑');
+  document.body.append(arriba);
+  arriba.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  window.addEventListener('scroll', () => { arriba.hidden = window.scrollY < window.innerHeight * 1.5; }, { passive: true });
 
   function arrancar() {
     pintarTodo(lang);
